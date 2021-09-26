@@ -21,7 +21,6 @@ git clone --depth=1 $KERNEL_SOURCE $KERNEL_BRANCH $DEVICE_CODENAME
 ClangPath=~/clang
     [[ "$(pwd)" != "clang" ]] && cd "$clang"
     mkdir $clang
-    rm -rf $clang/*
     if [ ! -e "clang/clang-r433403.tar.gz" ];then
         wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r433403.tar.gz -O "clang-r433403.tar.gz"
     fi
