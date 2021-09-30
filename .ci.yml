@@ -27,3 +27,4 @@ steps:
        from_secret: BUILD_HOST
    commands:
      - bash kernel_build.sh
+     - bash gcc.sh
