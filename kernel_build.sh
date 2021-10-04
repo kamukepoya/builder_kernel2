@@ -111,7 +111,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [SQ]$KERNEL_NAME-Kernel-${DATE}.zip *
+    zip -r9 Sea-Kernel-${DATE}.zip *
     cd ..
 }
 check
@@ -120,3 +120,5 @@ zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
+
+send_msg "Build Selesai | $((DIFF / 60))Menit $((DIFF % 60))Detik | Pembaruan: $(git log --pretty=format:'%h : %s' -5)"
