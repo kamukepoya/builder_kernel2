@@ -120,5 +120,3 @@ zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
-
-send_msg "Build Selesai | $((DIFF / 60))Menit $((DIFF % 60))Detik | Pembaruan: $(git log --pretty=format:'%h : %s' -5)"
