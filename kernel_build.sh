@@ -107,7 +107,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 Niki-Kernel-${DATE}.zip *
+    zip -r9 Niki-Kernel-OSS.zip *
     cd ..
 }
 check
