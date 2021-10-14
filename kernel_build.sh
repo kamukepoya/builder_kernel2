@@ -38,7 +38,7 @@ PATH="${PATH}:${CLANG_ROOTDIR}/bin"
 function check() {
 echo ================================================
 echo KernelCompiler
-echo version : rev1.5 - gaspoll
+echo version : PLERRR 4.0
 echo ================================================
 echo BUILDER NAME = ${KBUILD_BUILD_USER}
 echo BUILDER HOSTNAME = ${KBUILD_BUILD_HOST}
