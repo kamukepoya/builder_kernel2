@@ -47,7 +47,7 @@ tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}<
 compile(){
 tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
+make -j$(nproc) O=out ARCH=arm64 merlinx_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     LD=${GCC64_ROOTDIR}/bin/ld.lld \
     CROSS_COMPILE=${GCC64_ROOTDIR}/bin/aarch64-elf- \
@@ -69,7 +69,7 @@ function push() {
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
-        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>${KBUILD_COMPILER_STRING}</b>"
+        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | [GCC] TEST</b>"
 }
 # Fin Error
 function finerr() {
