@@ -88,11 +88,13 @@ function zipping() {
     cd ..
 }
 
-make_clean(){
+# clean
+function clean(){
 	rm -rf $(pwd)/merlin/out
 }
 compile
 zipping
+clean
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
