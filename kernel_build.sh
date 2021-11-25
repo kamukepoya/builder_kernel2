@@ -4,16 +4,9 @@
 #
 
 # Needed Secret Variable
-# KERNEL_NAME | Your kernel name
-# KERNEL_SOURCE | Your kernel link source
-# KERNEL_BRANCH  | Your needed kernel branch if needed with -b. eg -b eleven_eas
 # DEVICE_CODENAME | Your device codename
-# DEVICE_DEFCONFIG | Your device defconfig eg. lavender_defconfig
-# ANYKERNEL | Your Anykernel link repository
 # TG_TOKEN | Your telegram bot token
 # TG_CHAT_ID | Your telegram private ci chat id
-# BUILD_USER | Your username
-# BUILD_HOST | Your hostname
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
@@ -29,10 +22,11 @@ git clone --depth=1 https://github.com/mvaisakh/gcc-arm -b gcc-master gcc+
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
-DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG # IMPORTANT ! Declare your kernel source defconfig file here.
 CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
-export KBUILD_BUILD_USER=$BUILD_USER # Change with your own name or else.
-export KBUILD_BUILD_HOST=$BUILD_HOST # Change with your own hostname.
+export KERNELNAME=Sea-Kernel
+export TOOLCHAIN=clang
+export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
+export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 IMAGE=$(pwd)/$DEVICE_CODENAME/out/arch/arm64/boot/Image.gz-dtb
@@ -59,7 +53,7 @@ compile(){
 if [ $TOOLCHAIN == clang ]; then
 tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
+make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
@@ -69,15 +63,13 @@ make -j$(nproc) ARCH=arm64 O=out \
 else
     export CROSS_COMPILE=gcc/bin/aarch64-elf-
     export CROSS_COMPILE_ARM32=gcc+/bin/arm-eabi-
-    make O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
+    make O=out ARCH=arm64 merlin_defconfig
     make -j$(nproc --all) O=out ARCH=arm64
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
 	exit 1
    fi
-
-  git clone --depth=1 $ANYKERNEL AnyKernel
 	cp $IMAGE AnyKernel
 }
 
@@ -104,7 +96,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 Rocket-Kernel-OSS.zip *
+    zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
 }
 check
