@@ -65,9 +65,6 @@ fi
 }
    if ! [ -a "$IMAGE" ]; then
 	cp $IMAGE AnyKernel
-else
-
-}
 
 # Push kernel to channel
 function push() {
