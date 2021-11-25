@@ -65,6 +65,7 @@ fi
 }
    if ! [ -a "$IMAGE" ]; then
 	cp $IMAGE AnyKernel
+else
 
 }
 
