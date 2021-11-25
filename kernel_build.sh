@@ -89,7 +89,7 @@ function zipping() {
 }
 
 make_clean(){
-	rm -rf out
+	rm -rf $(pwd)/merlin/out
 }
 compile
 zipping
