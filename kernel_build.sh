@@ -62,11 +62,15 @@ else
     make O=out ARCH=arm64 merlin_defconfig
     make -j$(nproc --all) O=out ARCH=arm64
 
+fi
+
+}
+
    if ! [ -a "$IMAGE" ]; then
-	finerr
-	exit 1
    fi
 	cp $IMAGE AnyKernel
+
+}
 
 # Push kernel to channel
 function push() {
@@ -94,7 +98,6 @@ function zipping() {
     zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
 }
-check
 compile
 zipping
 END=$(date +"%s")
