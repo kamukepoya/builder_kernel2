@@ -13,8 +13,6 @@ echo "Downloading few Dependecies . . ."
      git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven
      git clone --depth=1 https://github.com/GengKapak/GengKapak-clang -b 12 clang
      git clone --depth=1 https://github.com/Asyanx/AnyKernel3.1 -b master AnyKernel
-     git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 -b gcc-master gcc
-     git clone --depth=1 https://github.com/mvaisakh/gcc-arm -b gcc-master gcc+
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
@@ -46,7 +44,6 @@ tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}<
 
 # Compile
 compile(){
-if [ $TOOLCHAIN == clang ]; then
 tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
@@ -56,15 +53,13 @@ make -j$(nproc) ARCH=arm64 O=out \
     LD=${CLANG_ROOTDIR}/bin/ld.lld \
     CROSS_COMPILE=${CLANG_ROOTDIR}/bin/aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
-else
-    export CROSS_COMPILE=gcc/bin/aarch64-elf-
-    export CROSS_COMPILE_ARM32=gcc+/bin/arm-eabi-
-    make O=out ARCH=arm64 merlin_defconfig
-    make -j$(nproc --all) O=out ARCH=arm64
-fi
-}
+
    if ! [ -a "$IMAGE" ]; then
+	finerr
+	exit 1
+   else
 	cp $IMAGE AnyKernel
+}
 
 # Push kernel to channel
 function push() {
@@ -91,10 +86,9 @@ function zipping() {
     cd AnyKernel || exit 1
     zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
-
+}
 compile
 zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
-}
