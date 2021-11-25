@@ -81,16 +81,18 @@ function finerr() {
     exit 1
 }
 
+# clean
+function clean(){
+	rm -rf $(pwd)/merlin \
+	rm -rf $(pwd)/AnyKernel \
+	rm -rf $(pwd)/clang
+}
+
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
     zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
-}
-
-# clean
-function clean(){
-	rm -rf $(pwd)/merlin/out
 }
 compile
 zipping
