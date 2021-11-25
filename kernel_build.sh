@@ -96,7 +96,7 @@ function zipping() {
 }
 compile
 zipping
-clean
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
+clean
