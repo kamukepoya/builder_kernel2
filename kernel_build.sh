@@ -87,6 +87,10 @@ function zipping() {
     zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
 }
+
+make_clean(){
+	rm -rf out
+}
 compile
 zipping
 END=$(date +"%s")
