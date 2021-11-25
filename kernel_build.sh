@@ -12,7 +12,6 @@ echo "Downloading few Dependecies . . ."
 # Kernel Sources
      git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven
      git clone --depth=1 https://github.com/GengKapak/GengKapak-clang -b 12 clang
-     git clone --depth=1 https://github.com/Asyanx/AnyKernel3.1 -b master AnyKernel
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
@@ -57,7 +56,8 @@ make -j$(nproc) ARCH=arm64 O=out \
    if ! [ -a "$IMAGE" ]; then
 	finerr
 	exit 1
-   else
+   fi
+  git clone --depth=1 $ANYKERNEL AnyKernel
 	cp $IMAGE AnyKernel
 }
 
