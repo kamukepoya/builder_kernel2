@@ -91,9 +91,10 @@ function zipping() {
     cd AnyKernel || exit 1
     zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
-}
+
 compile
 zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
+}
