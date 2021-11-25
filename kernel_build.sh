@@ -61,16 +61,12 @@ else
     export CROSS_COMPILE_ARM32=gcc+/bin/arm-eabi-
     make O=out ARCH=arm64 merlin_defconfig
     make -j$(nproc --all) O=out ARCH=arm64
-fi
-
-}
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
 	exit 1
    fi
 	cp $IMAGE AnyKernel
-}
 
 # Push kernel to channel
 function push() {
