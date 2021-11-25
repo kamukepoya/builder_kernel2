@@ -82,7 +82,7 @@ function finerr() {
 }
 
 # clean
-function clean(){
+function clean() {
 	rm -rf $(pwd)/merlin \
 	rm -rf $(pwd)/AnyKernel \
 	rm -rf $(pwd)/clang
