@@ -17,8 +17,15 @@
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-git clone --depth=1 $KERNEL_SOURCE $KERNEL_BRANCH $DEVICE_CODENAME
+if [ $TOOLCHAIN == "clang" ]
+then
+git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven
 git clone --depth=1 https://github.com/GengKapak/GengKapak-clang -b 12 clang
+else
+git clone --depth=1 https://github.com/Asyanx/AnyKernel3.1 -b master AnyKernel
+fi
+git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 -b gcc-master gcc
+git clone --depth=1 https://github.com/mvaisakh/gcc-arm -b gcc-master gcc+
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
@@ -32,22 +39,6 @@ IMAGE=$(pwd)/$DEVICE_CODENAME/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 PATH="${PATH}:${CLANG_ROOTDIR}/bin"
-
-# Checking environtment
-# Warning !! Dont Change anything there without known reason.
-function check() {
-echo ================================================
-echo KernelCompiler
-echo version : PLERRR 4.0
-echo ================================================
-echo BUILDER NAME = ${KBUILD_BUILD_USER}
-echo BUILDER HOSTNAME = ${KBUILD_BUILD_HOST}
-echo DEVICE_DEFCONFIG = ${DEVICE_DEFCONFIG}
-echo TOOLCHAIN_VERSION = ${KBUILD_COMPILER_STRING}
-echo CLANG_ROOTDIR = ${CLANG_ROOTDIR}
-echo KERNEL_ROOTDIR = ${KERNEL_ROOTDIR}
-echo ================================================
-}
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -65,6 +56,7 @@ tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}<
 
 # Compile
 compile(){
+if [ $TOOLCHAIN == clang ]; then
 tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
@@ -74,6 +66,11 @@ make -j$(nproc) ARCH=arm64 O=out \
     LD=${CLANG_ROOTDIR}/bin/ld.lld \
     CROSS_COMPILE=${CLANG_ROOTDIR}/bin/aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
+else
+    export CROSS_COMPILE=gcc/bin/aarch64-elf-
+    export CROSS_COMPILE_ARM32=gcc+/bin/arm-eabi-
+    make O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
+    make -j$(nproc --all) O=out ARCH=arm64
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
