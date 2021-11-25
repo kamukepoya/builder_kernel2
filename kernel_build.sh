@@ -62,14 +62,11 @@ else
     make O=out ARCH=arm64 merlin_defconfig
     make -j$(nproc --all) O=out ARCH=arm64
 
-fi
-
-}
-
    if ! [ -a "$IMAGE" ]; then
-   fi
+	finerr
+	exit 1
 	cp $IMAGE AnyKernel
-
+fi
 }
 
 # Push kernel to channel
