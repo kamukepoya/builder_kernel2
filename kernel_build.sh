@@ -10,11 +10,11 @@
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven
+     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
      git clone --depth=1 https://github.com/GengKapak/GengKapak-clang -b 12 clang
 
 # Main Declaration
-KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
+KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
 CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
 export KERNELNAME=Sea-Kernel
 export TOOLCHAIN=clang
@@ -22,7 +22,7 @@ export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
-IMAGE=$(pwd)/$DEVICE_CODENAME/out/arch/arm64/boot/Image.gz-dtb
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 PATH="${PATH}:${CLANG_ROOTDIR}/bin"
