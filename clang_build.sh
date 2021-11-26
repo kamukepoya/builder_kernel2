@@ -23,6 +23,29 @@ CloneFourteenGugelClang(){
     tar -xf clang-r437112.tar.gz -C $ClangPath
 }
 
+CloneCompiledGcc(){
+    [[ "$(pwd)" != "merlin" ]] && cd "merlin"
+    GCCaPath="gcc"
+    GCCbPath="gcc+"
+    rm -rf ${GCCaPath}/aarch64-linux-gnu ${GCCbPath}/arm-linux-gnueabi
+    mkdir "${GCCaPath}"
+    mkdir "${GCCbPath}"
+    rm -rf ${GCCaPath}/* ${GCCbPath}/*
+    if [ ! -e "${MainPath}/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
+        wget -q https://gcc-drive.zyc-files.workers.dev/0:/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz
+    fi
+    tar -xf arm-linux-gnueabi-10.x-gnu-20210311.tar.gz -C $GCCbPath
+    GCCbPath="${GCCbPath}/arm-linux-gnueabi"
+    for32=arm-linux-gnueabi
+    if [ ! -e "${MainPath}/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
+        wget -q https://gcc-drive.zyc-files.workers.dev/0:/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz
+    fi
+    tar -xf aarch64-linux-gnu-10.x-gnu-20210311.tar.gz -C $GCCaPath
+    GCCaPath="${GCCaPath}/aarch64-linux-gnu"
+    for64=aarch64-linux-gnu
+    GetGccVersion
+}
+
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
 CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
@@ -34,7 +57,7 @@ export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
-PATH="${PATH}:${CLANG_ROOTDIR}/bin"
+PATH=$clang/bin:gcc/bin:gcc+/bin:/usr/bin:${PATH} \
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -58,8 +81,10 @@ make -j$(nproc) O=out ARCH=arm64 merlinx_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
-    CROSS_COMPILE=${CLANG_ROOTDIR}/bin/aarch64-linux-gnu- \
-    CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
+    CROSS_COMPILE=$for64- \
+    CROSS_COMPILE_ARM32=$for32- \
+    CLANG_TRIPLE=aarch64-linux-gnu-
+    else
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
