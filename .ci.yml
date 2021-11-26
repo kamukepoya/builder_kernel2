@@ -30,4 +30,4 @@ steps:
      - rm -rf merlin/out
      - rm -rf clang
      - rm -rf AnyKernel
-     - bash clang_build.sh
+     - bash google_build.sh
