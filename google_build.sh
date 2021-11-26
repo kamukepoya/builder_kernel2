@@ -11,40 +11,9 @@
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
      git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlinx
-
-CloneFourteenGugelClang(){
-    ClangPath=clang
-    [[ "$(pwd)" != "clang" ]] && cd "clang"
-    mkdir $ClangPath
-    rm -rf $ClangPath/*
-    if [ ! -e "clang/clang-r437112.tar.gz" ];then
-        wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
-    fi
-    tar -xf clang-r437112.tar.gz -C $ClangPath
-}
-
-CloneCompiledGcc(){
-    [[ "$(pwd)" != "merlinx" ]] && cd "merlinx"
-    GCCaPath="gcc"
-    GCCbPath="gcc+"
-    rm -rf ${GCCaPath}/aarch64-linux-gnu ${GCCbPath}/arm-linux-gnueabi
-    mkdir "${GCCaPath}"
-    mkdir "${GCCbPath}"
-    rm -rf ${GCCaPath}/* ${GCCbPath}/*
-    if [ ! -e "gcc/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
-        wget -q https://gcc-drive.zyc-files.workers.dev/0:/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz
-    fi
-    tar -xf arm-linux-gnueabi-10.x-gnu-20210311.tar.gz -C $GCCbPath
-    GCCbPath="${GCCbPath}/arm-linux-gnueabi"
-    for32=arm-linux-gnueabi
-    if [ ! -e "gcc+/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
-        wget -q https://gcc-drive.zyc-files.workers.dev/0:/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz
-    fi
-    tar -xf aarch64-linux-gnu-10.x-gnu-20210311.tar.gz -C $GCCaPath
-    GCCaPath="${GCCaPath}/aarch64-linux-gnu"
-    for64=aarch64-linux-gnu
-    GetGccVersion
-}
+     git clone --depth=1 https://github.com/NusantaraDevs/DragonTC -b daily/10.0 clang
+     git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu gcc
+     git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf gcc32
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/merlinx # IMPORTANT ! Fill with your kernel source root directory.
@@ -57,7 +26,7 @@ export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 IMAGE=$(pwd)/merlinx/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
-PATH=clang/bin:gcc/bin:gcc+/bin:/usr/bin:${PATH} \
+PATH="$(pwd)/clang/bin:$(pwd)/gcc/bin:$(pwd)/gcc32/bin:${PATH}"
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -81,9 +50,9 @@ make -j$(nproc) O=out ARCH=arm64 merlinx_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
-    CROSS_COMPILE=$for64- \
-    CROSS_COMPILE_ARM32=$for32- \
-    CLANG_TRIPLE=aarch64-linux-gnu-
+    CLANG_TRIPLE=aarch64-linux-gnu- \
+    CROSS_COMPILE=aarch64-none-linux-gnu- \
+    CROSS_COMPILE_ARM32=arm-none-linux-gnueabi-
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
@@ -101,7 +70,7 @@ function push() {
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
-        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>GOOGLE CLANG 14</b>"
+        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>DTC</b>"
 }
 # Fin Error
 function finerr() {
@@ -123,7 +92,7 @@ function clean() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[GOOGLE]-$DATE.zip *
+    zip -r9 $KERNELNAME-[DTC]-$DATE.zip *
     cd ..
 }
 compile
