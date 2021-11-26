@@ -17,7 +17,6 @@ echo "Downloading few Dependecies . . ."
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
 CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
 export KERNELNAME=Sea-Kernel
-export TOOLCHAIN=clang
 export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
@@ -39,7 +38,7 @@ tg_post_msg() {
 }
 
 # Post Main Information
-tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0ADevice Defconfig: <code>${DEVICE_DEFCONFIG}</code>%0AClang Version : <code>${KBUILD_COMPILER_STRING}</code>%0AClang Rootdir : <code>${CLANG_ROOTDIR}</code>%0AKernel Rootdir : <code>${KERNEL_ROOTDIR}</code>"
+tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0AClang Version : <code>${KBUILD_COMPILER_STRING}</code>%0AClang Rootdir : <code>${CLANG_ROOTDIR}"
 
 # Compile
 compile(){
@@ -83,7 +82,7 @@ function finerr() {
 
 # clean
 function clean() {
-	rm -rf $(pwd)/merlin \
+	rm -rf $(pwd)/merlin/out \
 	rm -rf $(pwd)/AnyKernel \
 	rm -rf $(pwd)/clang
 }
