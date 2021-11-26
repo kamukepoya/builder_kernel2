@@ -26,5 +26,5 @@ steps:
      BUILD_HOST:
        from_secret: BUILD_HOST
    commands:
-     - bash google_build.sh
      - bash clang_build.sh
+     - bash google_build.sh
