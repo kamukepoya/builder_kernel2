@@ -46,10 +46,12 @@ tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}<
 compile(){
 tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 merlinx_defconfig
+make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
-    CC=${CLANG_ROOTDIR}/bin/clang \
-    NM=${CLANG_ROOTDIR}/bin/llvm-nm \
+    CC=clang \
+    AR=llvm-ar \
+    NM=llvm-nm \
+    LD=ld.lld \
     CLANG_TRIPLE=aarch64-linux-gnu- \
     CROSS_COMPILE=aarch64-none-linux-gnu- \
     CROSS_COMPILE_ARM32=arm-none-linux-gnueabi-
@@ -86,7 +88,9 @@ function finerr() {
 function clean() {
 	rm -rf $(pwd)/merlinx \
 	rm -rf $(pwd)/AnyKernel \
-	rm -rf $(pwd)/clang
+	rm -rf $(pwd)/clang \
+        rm -rf $(pwd)/gcc \
+        rm -rf $(pwd)/gcc32
 }
 
 # Zipping
