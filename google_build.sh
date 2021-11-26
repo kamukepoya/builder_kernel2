@@ -14,30 +14,30 @@ echo "Downloading few Dependecies . . ."
 
 CloneFourteenGugelClang(){
     ClangPath=clang
-    [[ "$(pwd)" != "merlin" ]] && cd "merlin"
+    [[ "$(pwd)" != "clang" ]] && cd "clang"
     mkdir $ClangPath
     rm -rf $ClangPath/*
-    if [ ! -e "merlin/clang-r437112.tar.gz" ];then
+    if [ ! -e "clang/clang-r437112.tar.gz" ];then
         wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
     fi
     tar -xf clang-r437112.tar.gz -C $ClangPath
 }
 
 CloneCompiledGcc(){
-    [[ "$(pwd)" != "merlin" ]] && cd "merlin"
+    [[ "$(pwd)" != "merlinx" ]] && cd "merlinx"
     GCCaPath="gcc"
     GCCbPath="gcc+"
     rm -rf ${GCCaPath}/aarch64-linux-gnu ${GCCbPath}/arm-linux-gnueabi
     mkdir "${GCCaPath}"
     mkdir "${GCCbPath}"
     rm -rf ${GCCaPath}/* ${GCCbPath}/*
-    if [ ! -e "merlin/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
+    if [ ! -e "gcc/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
         wget -q https://gcc-drive.zyc-files.workers.dev/0:/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz
     fi
     tar -xf arm-linux-gnueabi-10.x-gnu-20210311.tar.gz -C $GCCbPath
     GCCbPath="${GCCbPath}/arm-linux-gnueabi"
     for32=arm-linux-gnueabi
-    if [ ! -e "merlin/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
+    if [ ! -e "gcc+/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
         wget -q https://gcc-drive.zyc-files.workers.dev/0:/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz
     fi
     tar -xf aarch64-linux-gnu-10.x-gnu-20210311.tar.gz -C $GCCaPath
@@ -47,17 +47,17 @@ CloneCompiledGcc(){
 }
 
 # Main Declaration
-KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
-CLANG_ROOTDIR=$(pwd)/merlin/clang # IMPORTANT! Put your clang directory here.
+KERNEL_ROOTDIR=$(pwd)/merlinx # IMPORTANT ! Fill with your kernel source root directory.
+CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
 export KERNELNAME=Sea-Kernel
 export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
-IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
+IMAGE=$(pwd)/merlinx/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
-PATH=merlin/clang/bin:merlin/gcc/bin:Merlin/gcc+/bin:/usr/bin:${PATH} \
+PATH=clang/bin:gcc/bin:gcc+/bin:/usr/bin:${PATH} \
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -115,7 +115,7 @@ function finerr() {
 
 # clean
 function clean() {
-	rm -rf $(pwd)/merlin \
+	rm -rf $(pwd)/merlinx \
 	rm -rf $(pwd)/AnyKernel \
 	rm -rf $(pwd)/clang
 }
