@@ -5,8 +5,8 @@
 
 # clean
 function clean() {
-	rm -rf $(pwd)/merlin/out 
-	rm -rf $(pwd)/AnyKernel
+	rm -rf $(pwd)/merlin/out \
+	rm -rf $(pwd)/AnyKernel \
 	rm -rf $(pwd)/clang
 }
 
