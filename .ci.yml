@@ -27,6 +27,7 @@ steps:
        from_secret: BUILD_HOST
    commands:
      - bash clang_build.sh
+     - sleep 5m
      - rm -rf merlin
      - rm -rf clang
      - rm -rf AnyKernel
