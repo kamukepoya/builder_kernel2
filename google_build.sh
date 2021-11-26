@@ -3,28 +3,28 @@
 # Copyright (C) 2021 a xyzprjkt property
 #
 
-# Needed Secret Variable
-# DEVICE_CODENAME | Your device codename
-# TG_TOKEN | Your telegram bot token
-# TG_CHAT_ID | Your telegram private ci chat id
+# clean
+function clean() {
+	rm -rf $(pwd)/merlin/out 
+	rm -rf $(pwd)/AnyKernel
+	rm -rf $(pwd)/clang
+}
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlinx
      git clone --depth=1 https://github.com/NusantaraDevs/DragonTC -b daily/10.0 clang
      git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu gcc
      git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf gcc32
 
 # Main Declaration
-KERNEL_ROOTDIR=$(pwd)/merlinx
+KERNEL_ROOTDIR=$(pwd)/merlin
 CLANG_ROOTDIR=$(pwd)/clang
-DEVICE_DEFCONFIG=merlinx_defconfig
 export KERNELNAME=Sea-Kernel
 export KBUILD_BUILD_USER=Asyanx 
 export KBUILD_BUILD_HOST=#ZpyLab
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
-IMAGE=$(pwd)/merlinx/out/arch/arm64/boot/Image.gz-dtb
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 PATH="$(pwd)/clang/bin:$(pwd)/gcc/bin:$(pwd)/gcc32/bin:${PATH}"
@@ -83,24 +83,15 @@ function finerr() {
     exit 1
 }
 
-# clean
-function clean() {
-	rm -rf $(pwd)/merlinx \
-	rm -rf $(pwd)/AnyKernel \
-	rm -rf $(pwd)/clang \
-        rm -rf $(pwd)/gcc \
-        rm -rf $(pwd)/gcc32
-}
-
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
     zip -r9 $KERNELNAME-[DTC]-$DATE.zip *
     cd ..
 }
+clean
 compile
 zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
-clean
