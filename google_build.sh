@@ -101,7 +101,7 @@ function push() {
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
-        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>${KBUILD_COMPILER_STRING}</b>"
+        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>GOOGLE CLANG 14</b>"
 }
 # Fin Error
 function finerr() {
@@ -123,7 +123,7 @@ function clean() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-$DATE.zip *
+    zip -r9 $KERNELNAME-[GOOGLE]-$DATE.zip *
     cd ..
 }
 compile
