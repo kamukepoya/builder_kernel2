@@ -16,11 +16,12 @@ echo "Downloading few Dependecies . . ."
      git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf gcc32
 
 # Main Declaration
-KERNEL_ROOTDIR=$(pwd)/merlinx # IMPORTANT ! Fill with your kernel source root directory.
-CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
+KERNEL_ROOTDIR=$(pwd)/merlinx
+CLANG_ROOTDIR=$(pwd)/clang
+DEVICE_DEFCONFIG=merlinx_defconfig
 export KERNELNAME=Sea-Kernel
-export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
-export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
+export KBUILD_BUILD_USER=Asyanx 
+export KBUILD_BUILD_HOST=#ZpyLab
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 IMAGE=$(pwd)/merlinx/out/arch/arm64/boot/Image.gz-dtb
@@ -46,7 +47,7 @@ tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}<
 compile(){
 tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
+make -j$(nproc) O=out ARCH=arm64 merlinx_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=clang \
     NM=llvm-nm \
