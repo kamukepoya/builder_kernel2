@@ -3,13 +3,6 @@
 # Copyright (C) 2021 a xyzprjkt property
 #
 
-# clean
-function clean() {
-	rm -rf $(pwd)/merlin/out \
-	rm -rf $(pwd)/AnyKernel \
-	rm -rf $(pwd)/clang
-}
-
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
      git clone --depth=1 https://github.com/NusantaraDevs/DragonTC -b daily/10.0 clang
@@ -89,7 +82,6 @@ function zipping() {
     zip -r9 $KERNELNAME-[DTC]-$DATE.zip *
     cd ..
 }
-clean
 compile
 zipping
 END=$(date +"%s")
