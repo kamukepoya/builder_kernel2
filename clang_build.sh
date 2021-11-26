@@ -80,13 +80,6 @@ function finerr() {
     exit 1
 }
 
-# clean
-function clean() {
-	rm -rf $(pwd)/merlin/out \
-	rm -rf $(pwd)/AnyKernel \
-	rm -rf $(pwd)/clang
-}
-
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
@@ -98,4 +91,3 @@ zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
-clean
