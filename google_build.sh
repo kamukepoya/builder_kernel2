@@ -49,9 +49,7 @@ cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=clang \
-    AR=llvm-ar \
     NM=llvm-nm \
-    STRIP=llvm-strip \
     CLANG_TRIPLE=aarch64-linux-gnu- \
     CROSS_COMPILE=aarch64-none-linux-gnu- \
     CROSS_COMPILE_ARM32=arm-none-linux-gnueabi-
