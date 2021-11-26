@@ -26,5 +26,6 @@ steps:
      BUILD_HOST:
        from_secret: BUILD_HOST
    commands:
+     - bash clang_build.sh
      - bash kernel_build.sh
      - bash gcc_build.sh
