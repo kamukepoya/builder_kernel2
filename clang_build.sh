@@ -88,6 +88,6 @@ function zipping() {
 }
 compile
 zipping
+push
 END=$(date +"%s")
 DIFF=$(($END - $START))
-push
