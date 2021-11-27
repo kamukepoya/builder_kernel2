@@ -27,20 +27,23 @@ steps:
        from_secret: BUILD_HOST
    commands:
      - bash clang_build.sh
-     - rm -rf merlin/out
+     - rm -rf merlin
      - rm -rf clang
      - rm -rf AnyKernel
+     - sleep 25s
      - bash proton11_build.sh
-     - rm -rf merlin/out
+     - rm -rf merlin
      - rm -rf clang
      - rm -rf AnyKernel
+     - sleep 25s
      - bash dtc10_build.sh
-     - rm -rf merlin/out
+     - rm -rf merlin
      - rm -rf clang
      - rm -rf AnyKernel
      - bash dtc9_build.sh
-     - rm -rf merlin/out
+     - rm -rf merlin
      - rm -rf clang
      - rm -rf AnyKernel
+     - sleep 25s
      - bash dtc8_build.sh
 
