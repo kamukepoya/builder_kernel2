@@ -5,7 +5,6 @@
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
      git clone --depth=1 https://github.com/NusantaraDevs/DragonTC -b daily/10.0 clang
      git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu gcc
      git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf gcc32
@@ -34,12 +33,8 @@ tg_post_msg() {
 
 }
 
-# Post Main Information
-tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0ADevice Defconfig: <code>${DEVICE_DEFCONFIG}</code>%0AClang Version : <code>${KBUILD_COMPILER_STRING}</code>%0AClang Rootdir : <code>${CLANG_ROOTDIR}</code>%0AKernel Rootdir : <code>${KERNEL_ROOTDIR}</code>"
-
 # Compile
 compile(){
-tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 merlinx_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
@@ -80,7 +75,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[DTC]-$DATE.zip *
+    zip -r9 $KERNELNAME-[DTC10]-$DATE.zip *
     cd ..
 }
 compile
