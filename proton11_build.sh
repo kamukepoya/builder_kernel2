@@ -41,10 +41,12 @@ tg_post_msg() {
 compile(){
 cd ${KERNEL_ROOTDIR}
 echo "CONFIG_CC_STACKPROTECTOR_STRONG=y" >> arch/arm64/configs/"merlin_defconfig"
+echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"merlin_defconfig"
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
+    LD=${CLANG_ROOTDIR}/bin/ld.lld \
     CROSS_COMPILE=${CLANG_ROOTDIR}/bin/aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
 
