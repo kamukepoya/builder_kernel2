@@ -11,21 +11,13 @@
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+git clone --depth=1 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 10 gcc32
+git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 10 gcc
     mkdir clang
     if [ ! -e "clang/clang-r437112.tar.gz" ];then
         wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O clang-r437112.tar.gz
     fi
     tar -xf clang-r437112.tar.gz -C clang
-    mkdir gcc
-    mkdir gcc32
-    if [ ! -e "gcc32/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
-        wget -q https://gcc-drive.zyc-files.workers.dev/0:/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz
-    fi
-    tar -xf arm-linux-gnueabi-10.x-gnu-20210311.tar.gz -C gcc32
-    if [ ! -e "gcc/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
-        wget -q https://gcc-drive.zyc-files.workers.dev/0:/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz
-    fi
-    tar -xf aarch64-linux-gnu-10.x-gnu-20210311.tar.gz -C gcc
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
@@ -57,9 +49,9 @@ make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
 CC=${CLANG_ROOTDIR}/bin/clang \
 NM=${CLANG_ROOTDIR}/bin/llvm-nm \
-CROSS_COMPILE=aarch64-linux-gnu-- \ 
-CROSS_COMPILE_ARM32=arm-linux-gnueabi- \ 
 CLANG_TRIPLE=aarch64-linux-gnu-
+CROSS_COMPILE=aarch64-zyc-linux-gnu-- \ 
+CROSS_COMPILE_ARM32=arm-zyc-linux-gnueabi- \ 
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
