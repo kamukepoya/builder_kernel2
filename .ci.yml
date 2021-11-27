@@ -29,14 +29,18 @@ steps:
      - bash clang_build.sh
      - rm -rf merlin/out
      - rm -rf clang
+     - rm -rf AnyKernel
      - bash proton11_build.sh
      - rm -rf merlin/out
      - rm -rf clang
+     - rm -rf AnyKernel
      - bash dtc10_build.sh
      - rm -rf merlin/out
      - rm -rf clang
+     - rm -rf AnyKernel
      - bash dtc9_build.sh
      - rm -rf merlin/out
      - rm -rf clang
+     - rm -rf AnyKernel
      - bash dtc10_build.sh
 
