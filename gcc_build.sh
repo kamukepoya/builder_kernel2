@@ -49,9 +49,9 @@ make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
 CC=${CLANG_ROOTDIR}/bin/clang \
 NM=${CLANG_ROOTDIR}/bin/llvm-nm \
-CLANG_TRIPLE=aarch64-linux-gnu-
-CROSS_COMPILE=aarch64-zyc-linux-gnu-- \ 
-CROSS_COMPILE_ARM32=arm-zyc-linux-gnueabi- \ 
+CLANG_TRIPLE=aarch64-linux-gnu- \
+CROSS_COMPILE=aarch64-zyc-linux-gnu- \ 
+CROSS_COMPILE_ARM32=arm-zyc-linux-gnueabi- 
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
