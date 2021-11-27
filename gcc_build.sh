@@ -11,7 +11,7 @@
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
-CloneFourteenGugelClang(){
+CloneGugelClang(){
     ClangPath=${MainClangZipPath}
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     mkdir $ClangPath
@@ -24,7 +24,7 @@ CloneFourteenGugelClang(){
     ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
 }
 
-CloneGccten(){
+CloneGcc(){
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     GCCaPath="$MainZipGCCaPath"
     GCCbPath="$MainZipGCCbPath"
@@ -134,6 +134,8 @@ function zipping() {
     zip -r9 $KERNELNAME-[G]-$DATE.zip *
     cd ..
 }
+CloneGugelClang
+CloneGcc
 compile
 zipping
 END=$(date +"%s")
