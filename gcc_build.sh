@@ -11,6 +11,7 @@ MainGCCaPath="${MainPath}/GCC64"
 MainGCCbPath="${MainPath}/GCC32"
 MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
+ARCH="arm64"
 DEFFCONFIG="merlin_defconfig"
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
 export KERNELNAME=Sea-Kernel
