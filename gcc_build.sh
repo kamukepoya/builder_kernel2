@@ -65,7 +65,7 @@ tg_post_msg() {
 
 # Compile
 function compile(){
-    cd "${KernelPath}"
+    cd "${KERNEL_ROOTDIR}"
     SendInfoLink
     make    -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
     if [ -d "${ClangPath}/lib64" ];then
