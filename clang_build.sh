@@ -37,13 +37,11 @@ tg_post_msg() {
 
 }
 
-# Post Main Information
-tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0AClang Version : <code>${KBUILD_COMPILER_STRING}</code>%0AClang Rootdir : <code>${CLANG_ROOTDIR}"
-
 # Compile
 compile(){
 tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
+echo "CONFIG_CC_STACKPROTECTOR_STRONG=y" >> arch/arm64/configs/"merlin_defconfig"
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
