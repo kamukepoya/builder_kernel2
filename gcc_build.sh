@@ -23,6 +23,7 @@ START=$(date +"%s")
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+git clone https://github.com/Asyanx/AnyKernel3.1 AnyKernel
     ClangPath=${MainClangZipPath}
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     mkdir $ClangPath
@@ -89,9 +90,6 @@ function compile(){
                 HOSTLD=ld.lld \
                 LD=ld.lld \
                 CLANG_TRIPLE=aarch64-linux-gnu-
-   fi
-  git clone --depth=1 $ANYKERNEL AnyKernel
-	cp $IMAGE AnyKernel
 }
 
 # Push kernel to channel
@@ -101,9 +99,9 @@ function push() {
     curl -F document=@$ZIP "https://api.telegram.org/bot$TG_TOKEN/sendDocument" \
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
-        -F "parse_mode=html" \
-        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | [GCC] TEST</b>"
+        -F "parse_mode=html" 
 }
+
 # Fin Error
 function finerr() {
     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
