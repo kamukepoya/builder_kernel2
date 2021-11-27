@@ -42,5 +42,5 @@ steps:
      - rm -rf merlin/out
      - rm -rf clang
      - rm -rf AnyKernel
-     - bash dtc10_build.sh
+     - bash dtc8_build.sh
 
