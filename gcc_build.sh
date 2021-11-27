@@ -10,24 +10,34 @@
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
-     git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 gcc-arm64 
-     git clone --depth=1 https://github.com/mvaisakh/gcc-arm gcc-arm
-
+    mkdir clang
+    if [ ! -e "clang/clang-r433403.tar.gz" ];then
+        wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
+    fi
+    tar -xf clang-r433403.tar.gz -C clang
+else
+    mkdir gcc
+    mkdir gcc32
+    if [ ! -e "gcc/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
+        wget -q https://gcc-drive.zyc-files.workers.dev/0:/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz
+    fi
+    tar -xf arm-linux-gnueabi-10.x-gnu-20210311.tar.gz -C gcc32
+    if [ ! -e "gcc+/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
+        wget -q https://gcc-drive.zyc-files.workers.dev/0:/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz
+    fi
+    tar -xf aarch64-linux-gnu-10.x-gnu-20210311.tar.gz -C gcc
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
-GCC64_ROOTDIR=$(pwd)/gcc-arm64 # IMPORTANT! Put your gcc64 directory here.
-GCC32_ROOTDIR=$(pwd)/gcc-arm # IMPORTANT! Put your gcc32 directory here.
 export KERNELNAME=Sea-Kernel
+CLANG_ROOTDIR=$(pwd)/clang
 export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
-GCC_VER="$("$GCC64_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-LLD_VER="$("$GCC64_ROOTDIR"/bin/ld.lld --version | head -n 1)"
+CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/ */ /g' -e 's/[[:space:]]*$//')"
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
-PATH="${PATH}:${GCC64_ROOTDIR}/bin:${GCC32_ROOTDIR}/bin"
+PATH="$(pwd)/clang/bin:$(pwd)/gcc/bin:$(pwd)/gcc32/bin:${PATH}"
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -45,9 +55,9 @@ compile(){
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
-    LD=${GCC64_ROOTDIR}/bin/ld.lld \
-    CROSS_COMPILE=${GCC64_ROOTDIR}/bin/aarch64-elf- \
-    CROSS_COMPILE_ARM32=${GCC32_ROOTDIR}/bin/arm-eabi-
+CROSS_COMPILE=aarch64-linux-gnu-- \ 
+CROSS_COMPILE_ARM32=arm-linux-gnueabi- \ 
+CLANG_TRIPLE=aarch64-linux-gnu-
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
@@ -80,7 +90,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[GCC]-$DATE.zip *
+    zip -r9 $KERNELNAME-[G]-$DATE.zip *
     cd ..
 }
 compile
