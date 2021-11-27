@@ -56,6 +56,8 @@ compile(){
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
+CC=${CLANG_ROOTDIR}/bin/clang \
+NM=${CLANG_ROOTDIR}/bin/llvm-nm \
 CROSS_COMPILE=aarch64-linux-gnu-- \ 
 CROSS_COMPILE_ARM32=arm-linux-gnueabi- \ 
 CLANG_TRIPLE=aarch64-linux-gnu-
