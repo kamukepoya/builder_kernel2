@@ -36,15 +36,16 @@ steps:
      - rm -rf clang
      - rm -rf AnyKernel
      - sleep 25s
-     - bash dtc10_build.sh
-     - rm -rf merlin
-     - rm -rf clang
-     - rm -rf AnyKernel
-     - sleep 25s
-     - bash dtc9_build.sh
-     - rm -rf merlin
-     - rm -rf clang
-     - rm -rf AnyKernel
-     - sleep 25s
-     - bash dtc8_build.sh
+     - bash gcc_build.sh
+#     - bash dtc10_build.sh
+#     - rm -rf merlin
+#     - rm -rf clang
+#     - rm -rf AnyKernel
+#     - sleep 25s
+#     - bash dtc9_build.sh
+#     - rm -rf merlin
+#     - rm -rf clang
+#     - rm -rf AnyKernel
+#     - sleep 25s
+#     - bash dtc8_build.sh
 
