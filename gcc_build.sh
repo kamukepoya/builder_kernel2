@@ -17,6 +17,7 @@ KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root dir
 export KERNELNAME=Sea-Kernel
 export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 
@@ -90,6 +91,8 @@ function compile(){
                 HOSTLD=ld.lld \
                 LD=ld.lld \
                 CLANG_TRIPLE=aarch64-linux-gnu-
+  fi
+	cp $IMAGE AnyKernel
 }
 
 # Push kernel to channel
