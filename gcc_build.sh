@@ -13,10 +13,9 @@ echo "Downloading few Dependecies . . ."
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
     mkdir clang
     if [ ! -e "clang/clang-r433403.tar.gz" ];then
-        wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
+        wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O clang-r437112.tar.gz
     fi
     tar -xf clang-r433403.tar.gz -C clang
-else
     mkdir gcc
     mkdir gcc32
     if [ ! -e "gcc/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
