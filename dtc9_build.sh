@@ -6,8 +6,6 @@
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
      git clone --depth=1 https://github.com/NusantaraDevs/DragonTC -b 9.0 clang
-     git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu gcc
-     git clone --depth=1 https://github.com/Kyvangka1610/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf gcc32
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/merlin
