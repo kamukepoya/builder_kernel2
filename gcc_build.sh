@@ -3,7 +3,7 @@
 # Copyright (C) 2021 a xyzprjkt property
 #
 
-# Main Declaration
+# Main
 MainPath="$(pwd)"
 MainClangPath="${MainPath}/Clang"
 MainClangZipPath="${MainPath}/Clang-zip"
@@ -11,20 +11,11 @@ MainGCCaPath="${MainPath}/GCC64"
 MainGCCbPath="${MainPath}/GCC32"
 MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
-ARCH="arm64"
-DEFFCONFIG="merlin_defconfig"
-KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
-export KERNELNAME=Sea-Kernel
-export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
-export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
-IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
-DATE=$(date +"%F-%S")
-START=$(date +"%s")
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
 git clone https://github.com/Asyanx/AnyKernel3.1 AnyKernel
+git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
     ClangPath=${MainClangZipPath}
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     mkdir $ClangPath
@@ -53,6 +44,17 @@ git clone https://github.com/Asyanx/AnyKernel3.1 AnyKernel
     fi
     GCCaPath="${GCCaPath}/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf"
     for64=aarch64-none-elf
+
+#Main2
+ARCH="arm64"
+DEFFCONFIG="merlin_defconfig"
+KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
+export KERNELNAME=Sea-Kernel
+export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
+export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
+DATE=$(date +"%F-%S")
+START=$(date +"%s")
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -92,6 +94,7 @@ function compile(){
                 LD=ld.lld \
                 CLANG_TRIPLE=aarch64-linux-gnu-
   fi
+	finerr
 	cp $IMAGE AnyKernel
 }
 
