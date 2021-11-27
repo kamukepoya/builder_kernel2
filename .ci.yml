@@ -40,6 +40,7 @@ steps:
      - rm -rf merlin
      - rm -rf clang
      - rm -rf AnyKernel
+     - sleep 25s
      - bash dtc9_build.sh
      - rm -rf merlin
      - rm -rf clang
