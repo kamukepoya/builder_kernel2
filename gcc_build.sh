@@ -89,10 +89,6 @@ function compile(){
                 LD=ld.lld \
                 CLANG_TRIPLE=aarch64-linux-gnu-
    fi
-   if ! [ -a "$IMAGE" ];then
-	finerr
-	exit 1
-   fi
   git clone --depth=1 $ANYKERNEL AnyKernel
 	cp $IMAGE AnyKernel
 }
