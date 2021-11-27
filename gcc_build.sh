@@ -88,6 +88,7 @@ function compile(){
                 HOSTLD=ld.lld \
                 LD=ld.lld \
                 CLANG_TRIPLE=aarch64-linux-gnu-
+   fi
    if ! [ -a "$IMAGE" ];then
 	finerr
 	exit 1
