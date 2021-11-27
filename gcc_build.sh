@@ -18,11 +18,11 @@ git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven 
     tar -xf clang-r433403.tar.gz -C clang
     mkdir gcc
     mkdir gcc32
-    if [ ! -e "gcc/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
+    if [ ! -e "gcc32/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz" ];then
         wget -q https://gcc-drive.zyc-files.workers.dev/0:/arm-linux-gnueabi-10.x-gnu-20210311.tar.gz
     fi
     tar -xf arm-linux-gnueabi-10.x-gnu-20210311.tar.gz -C gcc32
-    if [ ! -e "gcc+/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
+    if [ ! -e "gcc/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz" ];then
         wget -q https://gcc-drive.zyc-files.workers.dev/0:/aarch64-linux-gnu-10.x-gnu-20210311.tar.gz
     fi
     tar -xf aarch64-linux-gnu-10.x-gnu-20210311.tar.gz -C gcc
