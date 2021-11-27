@@ -50,7 +50,6 @@ git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven 
     fi
     GCCaPath="${GCCaPath}/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf"
     for64=aarch64-none-elf
-    GetGccVersion
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -89,8 +88,7 @@ function compile(){
                 HOSTLD=ld.lld \
                 LD=ld.lld \
                 CLANG_TRIPLE=aarch64-linux-gnu-
-
-   if ! [ -a "$IMAGE" ]; then
+   if ! [ -a "$IMAGE" ];then
 	finerr
 	exit 1
    fi
