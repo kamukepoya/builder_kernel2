@@ -10,13 +10,13 @@
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlinx
+     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
      git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 gcc-arm64 
      git clone --depth=1 https://github.com/mvaisakh/gcc-arm gcc-arm
 
 
 # Main Declaration
-KERNEL_ROOTDIR=$(pwd)/merlinx # IMPORTANT ! Fill with your kernel source root directory.
+KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
 GCC64_ROOTDIR=$(pwd)/gcc-arm64 # IMPORTANT! Put your gcc64 directory here.
 GCC32_ROOTDIR=$(pwd)/gcc-arm # IMPORTANT! Put your gcc32 directory here.
 export KERNELNAME=Sea-Kernel
@@ -24,7 +24,7 @@ export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
 GCC_VER="$("$GCC64_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$GCC64_ROOTDIR"/bin/ld.lld --version | head -n 1)"
-IMAGE=$(pwd)/merlinx/out/arch/arm64/boot/Image.gz-dtb
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 PATH="${PATH}:${GCC64_ROOTDIR}/bin:${GCC32_ROOTDIR}/bin"
@@ -40,14 +40,10 @@ tg_post_msg() {
 
 }
 
-# Post Main Information
-tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}</code>%0ABuilder Host : <code>${KBUILD_BUILD_HOST}</code>%0ADevice Defconfig: <code>${DEVICE_DEFCONFIG}</code>%0AGCC Version : <code>${GCC_VER}</code>%0AGCC Rootdir : <code>${GCC64_ROOTDIR}</code>%0AKernel Rootdir : <code>${KERNEL_ROOTDIR}</code>"
-
 # Compile
 compile(){
-tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 merlinx_defconfig
+make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     LD=${GCC64_ROOTDIR}/bin/ld.lld \
     CROSS_COMPILE=${GCC64_ROOTDIR}/bin/aarch64-elf- \
