@@ -20,6 +20,13 @@ git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 12 gcc
     tar -xf clang-r437112.tar.gz -C clang
 
 # Main Declaration
+MainPath="$(pwd)"
+MainClangPath="${MainPath}/Clang"
+MainClangZipPath="${MainPath}/Clang-zip"
+MainGCCaPath="${MainPath}/GCC64"
+MainGCCbPath="${MainPath}/GCC32"
+MainZipGCCaPath="${MainPath}/GCC64-zip"
+MainZipGCCbPath="${MainPath}/GCC32-zip"
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
 export KERNELNAME=Sea-Kernel
 CLANG_ROOTDIR=$(pwd)/clang
