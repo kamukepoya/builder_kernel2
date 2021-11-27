@@ -3,10 +3,21 @@
 # Copyright (C) 2021 a xyzprjkt property
 #
 
-# Needed Secret Variable
-# DEVICE_CODENAME | Your device codename
-# TG_TOKEN | Your telegram bot token
-# TG_CHAT_ID | Your telegram private ci chat id
+# Main Declaration
+MainPath="$(pwd)"
+MainClangPath="${MainPath}/Clang"
+MainClangZipPath="${MainPath}/Clang-zip"
+MainGCCaPath="${MainPath}/GCC64"
+MainGCCbPath="${MainPath}/GCC32"
+MainZipGCCaPath="${MainPath}/GCC64-zip"
+MainZipGCCbPath="${MainPath}/GCC32-zip"
+DEFFCONFIG="merlin_defconfig"
+KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
+export KERNELNAME=Sea-Kernel
+export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
+export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
+DATE=$(date +"%F-%S")
+START=$(date +"%s")
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
@@ -41,22 +52,6 @@ git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven 
     for64=aarch64-none-elf
     GetGccVersion
 
-# Main Declaration
-MainPath="$(pwd)"
-MainClangPath="${MainPath}/Clang"
-MainClangZipPath="${MainPath}/Clang-zip"
-MainGCCaPath="${MainPath}/GCC64"
-MainGCCbPath="${MainPath}/GCC32"
-MainZipGCCaPath="${MainPath}/GCC64-zip"
-MainZipGCCbPath="${MainPath}/GCC32-zip"
-DEFFCONFIG="merlin_defconfig"
-KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
-export KERNELNAME=Sea-Kernel
-export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
-export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
-DATE=$(date +"%F-%S")
-START=$(date +"%s")
-
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
 
@@ -69,7 +64,7 @@ tg_post_msg() {
 }
 
 # Compile
-Compile(){
+function compile(){
     cd "${KernelPath}"
     SendInfoLink
     make    -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
