@@ -45,8 +45,9 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
+make -j$(nproc) O=out ARCH=arm64 "merlin_defconfig"
 make -j$(nproc) ARCH=arm64 O=out \
+LD_LIBRARY_PATH="${CLANG_ROOTDIR}/lib64:${LD_LIBRARY_PATH}" \
 CC=clang \
 NM=llvm-nm \
 CLANG_TRIPLE=aarch64-linux-gnu- \
