@@ -11,13 +11,40 @@
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
-git clone --depth=1 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 12 gcc32
-git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 12 gcc
-    mkdir clang
-    if [ ! -e "clang/clang-r437112.tar.gz" ];then
-        wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O clang-r437112.tar.gz
+CloneFourteenGugelClang(){
+    ClangPath=${MainClangZipPath}
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    mkdir $ClangPath
+    rm -rf $ClangPath/*
+    if [ ! -e "${MainPath}/clang-r437112.tar.gz" ];then
+        wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
     fi
-    tar -xf clang-r437112.tar.gz -C clang
+    tar -xf clang-r437112.tar.gz -C $ClangPath
+    TypeBuilder="GCLANG-14"
+    ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
+}
+
+CloneGccten(){
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    GCCaPath="$MainZipGCCaPath"
+    GCCbPath="$MainZipGCCbPath"
+    mkdir "${GCCaPath}"
+    mkdir "${GCCbPath}"
+    rm -rf ${GCCaPath}/* ${GCCbPath}/*
+    if [ ! -e "${MainPath}/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz" ];then
+        wget -q https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz
+        tar -xf gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz -C $GCCbPath
+    fi
+    GCCbPath="${GCCbPath}/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf"
+    for32=arm-none-linux-gnueabihf
+    if [ ! -e "${MainPath}/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf.tar.xz" ];then
+        wget -q https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf.tar.xz
+        tar -xf gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf.tar.xz -C $GCCaPath
+    fi
+    GCCaPath="${GCCaPath}/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf"
+    for64=aarch64-none-elf
+    GetGccVersion
+}
 
 # Main Declaration
 MainPath="$(pwd)"
@@ -27,16 +54,13 @@ MainGCCaPath="${MainPath}/GCC64"
 MainGCCbPath="${MainPath}/GCC32"
 MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
+DEFFCONFIG="merlin_defconfig"
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
 export KERNELNAME=Sea-Kernel
-CLANG_ROOTDIR=$(pwd)/clang
 export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
-CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/ */ /g' -e 's/[[:space:]]*$//')"
-IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
-PATH="$(pwd)/clang/bin:$(pwd)/gcc/bin:$(pwd)/gcc32/bin:${PATH}"
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -50,16 +74,31 @@ tg_post_msg() {
 }
 
 # Compile
-compile(){
-cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 "merlin_defconfig"
-make -j$(nproc) ARCH=arm64 O=out \
-LD_LIBRARY_PATH="${CLANG_ROOTDIR}/lib64:${LD_LIBRARY_PATH}" \
-CC=clang \
-NM=llvm-nm \
-CLANG_TRIPLE=aarch64-linux-gnu- \
-CROSS_COMPILE=aarch64-zyc-linux-gnu- \ 
-CROSS_COMPILE_ARM32=arm-zyc-linux-gnueabi- 
+Compile(){
+    cd "${KernelPath}"
+    SendInfoLink
+    make    -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
+    if [ -d "${ClangPath}/lib64" ];then
+        MAKE=(
+                ARCH=$ARCH \
+                SUBARCH=$ARCH \
+                PATH=${ClangPath}/bin:${GCCaPath}/bin:${GCCbPath}/bin:/usr/bin:${PATH} \
+                LD_LIBRARY_PATH="${ClangPath}/lib64:${LD_LIBRARY_PATH}" \
+                CC=clang \
+                CROSS_COMPILE=$for64- \
+                CROSS_COMPILE_ARM32=$for32- \
+                AS=llvm-as \
+                NM=llvm-nm \
+                STRIP=llvm-strip \
+                OBJDUMP=llvm-objdump \
+                OBJSIZE=llvm-size \
+                READELF=llvm-readelf \
+                HOSTCC=clang \
+                HOSTCXX=clang++ \
+                HOSTAR=llvm-ar \
+                HOSTLD=ld.lld \
+                LD=ld.lld \
+                CLANG_TRIPLE=aarch64-linux-gnu-
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
