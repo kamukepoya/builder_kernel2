@@ -45,8 +45,8 @@ make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     LD_LIBRARY_PATH="${ClangPath}/lib:${LD_LIBRARY_PATH}" \
     CC=clang \
-    CROSS_COMPILE=aarch64-zyc-linux-gnu- \
-    CROSS_COMPILE_ARM32=arm-zyc-linux-gnueabi- \
+    CROSS_COMPILE=$for64- \
+    CROSS_COMPILE_ARM32=$for32- \
     CLANG_TRIPLE=aarch64-linux-gnu-
 
    if ! [ -a "$IMAGE" ]; then
