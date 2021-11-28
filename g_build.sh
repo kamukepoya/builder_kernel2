@@ -83,7 +83,6 @@ function zipping() {
     zip -r9 $KERNELNAME-[Google0]-$DATE.zip *
     cd ..
 }
-clonec
 compile
 zipping
 END=$(date +"%s")
