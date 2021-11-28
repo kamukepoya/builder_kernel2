@@ -64,5 +64,7 @@ CloneCompiledGccTwelve(){
     fi
     for32=arm-zyc-linux-gnueabi
 }
+CloneFourteenGugelClang
+CloneCompiledGccTwelve
 END=$(date +"%s")
 DIFF=$(($END - $START))
