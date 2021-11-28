@@ -54,12 +54,11 @@ compile(){
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
+    LD_LIBRARY_PATH="${ClangPath}/lib:${LD_LIBRARY_PATH}" \
     CC=clang \
-    CC_ARM32=clang \
-    STRIP=llvm-strip \
-    CLANG_TRIPLE=aarch64-linux-gnu- \
     CROSS_COMPILE=aarch64-zyc-linux-gnu- \
-    CROSS_COMPILE_ARM32=$for32-
+    CROSS_COMPILE_ARM32=arm-zyc-linux-gnueabi- \
+    CLANG_TRIPLE=aarch64-linux-gnu-
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
@@ -92,7 +91,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[DTC10]-$DATE.zip *
+    zip -r9 $KERNELNAME-[Google0]-$DATE.zip *
     cd ..
 }
 clonec
