@@ -13,8 +13,49 @@ GCCbPath="${MainPath}/GCC32"
 MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
-echo "Downloading few Dependecies . . ."
-git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+CloneKernel(){
+    git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+}
+
+CloneFourteenGugelClang(){
+    ClangPath=${MainClangZipPath}
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    mkdir $ClangPath
+    rm -rf $ClangPath/*
+    if [ ! -e "${MainPath}/clang-r437112.tar.gz" ];then
+        wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
+    fi
+    tar -xf clang-r437112.tar.gz -C $ClangPath
+    TypeBuilder="GCLANG-14"
+    ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
+}
+
+CloneCompiledGccTwelve(){
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    GCCaPath="${MainGCCaPath}"
+    if [ ! -d "$GCCaPath" ];then
+        git clone https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 12 $GCCaPath --depth=1
+    else
+        cd "${GCCaPath}"
+        git fetch https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 12 --depth=1
+        git checkout FETCH_HEAD
+        [[ ! -z "$(git branch | grep 12)" ]] && git branch -D 12
+        git checkout -b 12
+    fi
+    for64=aarch64-zyc-linux-gnu
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    GCCbPath="${MainGCCbPath}"
+    if [ ! -d "$GCCbPath" ];then
+        git clone https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 12 $GCCbPath --depth=1
+    else
+        cd "${GCCbPath}"
+        git fetch https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 12 --depth=1
+        git checkout FETCH_HEAD
+        [[ ! -z "$(git branch | grep 12)" ]] && git branch -D 12
+        git checkout -b 12
+    fi
+    for32=arm-zyc-linux-gnueabi
+}
 
 #Main2
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
@@ -31,9 +72,9 @@ export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
 
 tg_post_msg() {
   curl -s -X POST "$BOT_MSG_URL" -d chat_id="$TG_CHAT_ID" \
-  -F "disable_web_page_preview=true" \
-  -F "parse_mode=html" \
-  -F text="$1"
+  -d "disable_web_page_preview=true" \
+  -d "parse_mode=html" \
+  -d text="$1"
 
 }
 
@@ -69,10 +110,10 @@ function push() {
 # Fin Error
 function finerr() {
     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
-        -F chat_id="$TG_CHAT_ID" \
-        -F "disable_web_page_preview=true" \
-        -F "parse_mode=markdown" \
-        -F text="Build throw an error(s)"
+        -d chat_id="$TG_CHAT_ID" \
+        -d "disable_web_page_preview=true" \
+        -d "parse_mode=markdown" \
+        -d text="Build throw an error(s)"
     exit 1
 }
 
@@ -82,6 +123,9 @@ function zipping() {
     zip -r9 $KERNELNAME-[Google0]-$DATE.zip *
     cd ..
 }
+CloneKernel
+CloneFourteenGugelClang
+CloneCompiledGccTwelve
 compile
 zipping
 END=$(date +"%s")
