@@ -15,8 +15,6 @@ MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 echo "Downloading few Dependecies . . ."
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
-git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 11 $GCCaPath
-git clone --depth=1 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 11 $GCCbPath
 
 #Main2
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
