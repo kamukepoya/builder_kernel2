@@ -26,6 +26,7 @@ steps:
      BUILD_HOST:
        from_secret: BUILD_HOST
    commands:
+     - bash clang_gcc.sh
      - bash g_build.sh
 #     - rm -rf merlin
 #     - rm -rf clang
