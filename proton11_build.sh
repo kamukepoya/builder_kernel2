@@ -42,6 +42,8 @@ compile(){
 cd ${KERNEL_ROOTDIR}
 echo "CONFIG_CC_STACKPROTECTOR_STRONG=y" >> arch/arm64/configs/"merlin_defconfig"
 echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"merlin_defconfig"
+echo "CONFIG_ARM_ARCH_TIMER_VCT_ACCESS=y" >> arch/arm64/configs/"merlin_defconfig"
+echo "CONFIG_KUSER_HELPERS=y" >> arch/arm64/configs/"merlin_defconfig"
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
