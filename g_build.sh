@@ -119,6 +119,7 @@ function zipping() {
     cd AnyKernel || exit 1
     zip -r9 $KERNELNAME-[DTC10]-$DATE.zip *
     cd ..
+}
 clonec
 clonegcc
 compile
