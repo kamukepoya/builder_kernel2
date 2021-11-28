@@ -13,6 +13,18 @@ GCCbPath="${MainPath}/GCC32"
 MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
+# Telegram
+export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
+
+tg_post_msg() {
+  curl -s -X POST "$BOT_MSG_URL" -d chat_id="$TG_CHAT_ID" \
+  -d "disable_web_page_preview=true" \
+  -d "parse_mode=html" \
+  -d text="$1"
+
+}
+tg_post_msg "<b>xKernelCompiler:</b><code>Compile Kernel DI Mulai</code>"
+
 CloneFourteenGugelClang(){
     ClangPath=${MainClangZipPath}
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
