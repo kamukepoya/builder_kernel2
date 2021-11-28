@@ -4,8 +4,8 @@
 #
 # Main
 MainPath="$(pwd)"
-MainClangPath="${MainPath}/Clang"
-MainClangZipPath="${MainPath}/Clang-zip"
+MainClangPath="${MainPath}/clang"
+MainClangZipPath="${MainPath}/clang-zip"
 GCCaPath="${MainPath}/GCC64"
 GCCbPath="${MainPath}/GCC32"
 MainZipGCCaPath="${MainPath}/GCC64-zip"
