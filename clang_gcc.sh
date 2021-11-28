@@ -1,5 +1,15 @@
 #! /bin/bash
 
+# Main
+MainPath="$(pwd)"
+MainClangPath="${MainPath}/clang"
+MainClangZipPath="${MainPath}/clang-zip"
+ClangPath=${MainClangZipPath}
+GCCaPath="${MainPath}/GCC64"
+GCCbPath="${MainPath}/GCC32"
+MainZipGCCaPath="${MainPath}/GCC64-zip"
+MainZipGCCbPath="${MainPath}/GCC32-zip"
+
 CloneFourteenGugelClang(){
     ClangPath=${MainClangZipPath}
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
@@ -38,5 +48,4 @@ CloneCompiledGccTwelve(){
         git checkout -b 12
     fi
     for32=arm-zyc-linux-gnueabi
-    GetGccVersion
 }
