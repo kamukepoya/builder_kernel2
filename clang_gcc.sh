@@ -1,5 +1,8 @@
 #! /bin/bash
 
+DATE=$(date +"%F-%S")
+START=$(date +"%s")
+
 # Main
 MainPath="$(pwd)"
 MainClangPath="${MainPath}/clang"
@@ -49,3 +52,5 @@ CloneCompiledGccTwelve(){
     fi
     for32=arm-zyc-linux-gnueabi
 }
+END=$(date +"%s")
+DIFF=$(($END - $START))
