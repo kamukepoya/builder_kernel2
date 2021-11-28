@@ -12,8 +12,9 @@ MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 echo "Downloading few Dependecies . . ."
-git clone https://github.com/Asyanx/AnyKernel3.1 AnyKernel
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+
+clonec(){
     ClangPath=${MainClangZipPath}
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     mkdir $ClangPath
@@ -22,6 +23,9 @@ git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven 
         wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
     fi
     tar -xf clang-r437112.tar.gz -C $ClangPath
+}
+
+clonegcc(){
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     GCCaPath="${MainGCCaPath}"
     if [ ! -d "$GCCaPath" ];then
@@ -46,6 +50,7 @@ git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven 
         git checkout -b 11
     fi
     for32=arm-zyc-linux-gnueabi
+}
 
 #Main2
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
@@ -115,7 +120,8 @@ function zipping() {
     cd AnyKernel || exit 1
     zip -r9 $KERNELNAME-[DTC10]-$DATE.zip *
     cd ..
-}
+clonec
+clonegcc
 compile
 zipping
 END=$(date +"%s")
