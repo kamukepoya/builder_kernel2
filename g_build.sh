@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2021 a xyzprjkt property
 #
+
 # Main
 MainPath="$(pwd)"
 MainClangPath="${MainPath}/clang"
@@ -12,19 +13,21 @@ MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 echo "Downloading few Dependecies . . ."
-git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
-git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 11 $GCCaPath
-git clone --depth=1 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 11 $GCCbPath
-
 clonec(){
     ClangPath=${MainClangZipPath}
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     mkdir $ClangPath
+    rm -rf $ClangPath/*
     if [ ! -e "${MainPath}/clang-r437112.tar.gz" ];then
         wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
     fi
     tar -xf clang-r437112.tar.gz -C $ClangPath
+    ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
 }
+
+git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 11 $GCCaPath
+git clone --depth=1 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 11 $GCCbPath
 
 #Main2
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
@@ -32,7 +35,6 @@ export KERNELNAME=Sea-Kernel
 export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
-ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 PATH=${ClangPath}/bin:${GCCaPath}/bin:${GCCbPath}/bin:/usr/bin:${PATH}
