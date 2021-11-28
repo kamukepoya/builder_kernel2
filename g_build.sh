@@ -41,6 +41,8 @@ export KERNELNAME=Sea-Kernel
 export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
 export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
+CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
+export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 PATH=${ClangPath}/bin:${GCCaPath}/bin:${GCCbPath}/bin:/usr/bin:${PATH}
@@ -83,7 +85,7 @@ function push() {
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
-        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>DTC</b>"
+        -F caption="Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | For <b>$DEVICE_CODENAME</b> | <b>${KBUILD_COMPILER_STRING}</b>"
 }
 # Fin Error
 function finerr() {
@@ -98,7 +100,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[Google0]-$DATE.zip *
+    zip -r9 $KERNELNAME-[GCLANG14]-$DATE.zip *
     cd ..
 }
 CloneKernel
