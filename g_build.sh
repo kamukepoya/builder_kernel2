@@ -13,33 +13,8 @@ MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 echo "Downloading few Dependecies . . ."
 git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
-
-clonegcc(){
-    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
-    GCCaPath="${MainGCCaPath}"
-    if [ ! -d "$GCCaPath" ];then
-        git clone https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 11 $GCCaPath --depth=1
-    else
-        cd "${GCCaPath}"
-        git fetch https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 11 --depth=1
-        git checkout FETCH_HEAD
-        [[ ! -z "$(git branch | grep 11)" ]] && git branch -D 11
-        git checkout -b 11
-    fi
-    for64=aarch64-zyc-linux-gnu
-    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
-    GCCbPath="${MainGCCbPath}"
-    if [ ! -d "$GCCbPath" ];then
-        git clone https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 11 $GCCbPath --depth=1
-    else
-        cd "${GCCbPath}"
-        git fetch https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 11 --depth=1
-        git checkout FETCH_HEAD
-        [[ ! -z "$(git branch | grep 11)" ]] && git branch -D 11
-        git checkout -b 11
-    fi
-    for32=arm-zyc-linux-gnueabi
-}
+git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 11 $GCCaPath
+git clone --depth=1 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 11 $GCCbPath
 
 clonec(){
     ClangPath=${MainClangZipPath}
@@ -83,7 +58,7 @@ make -j$(nproc) ARCH=arm64 O=out \
     NM=llvm-nm \
     STRIP=llvm-strip \
     CLANG_TRIPLE=aarch64-linux-gnu- \
-    CROSS_COMPILE=$for64- \
+    CROSS_COMPILE=aarch64-zyc-linux-gnu- \
     CROSS_COMPILE_ARM32=$for32-
 
    if ! [ -a "$IMAGE" ]; then
@@ -120,7 +95,6 @@ function zipping() {
     zip -r9 $KERNELNAME-[DTC10]-$DATE.zip *
     cd ..
 }
-clonegcc
 clonec
 compile
 zipping
