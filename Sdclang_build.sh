@@ -52,7 +52,6 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-echo "CONFIG_CC_STACKPROTECTOR_STRONG=y" >> arch/arm64/configs/"merlin_defconfig"
 echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"merlin_defconfig"
 echo "CONFIG_ARM_ARCH_TIMER_VCT_ACCESS=y" >> arch/arm64/configs/"merlin_defconfig"
 echo "CONFIG_KUSER_HELPERS=y" >> arch/arm64/configs/"merlin_defconfig"
