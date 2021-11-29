@@ -37,6 +37,7 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
+echo "CONFIG_LLVM_POLLY=y" >> arch/arm64/configs/"merlin_defconfig"
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=clang \
