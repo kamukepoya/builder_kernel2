@@ -5,6 +5,7 @@ steps:
  - name: xKernel Compilation
    image: xyzuan/xdocker:latest
    environment:
+     ANYKERNEL:
        from_secret: ANYKERNEL
      TG_TOKEN:
        from_secret: TG_TOKEN

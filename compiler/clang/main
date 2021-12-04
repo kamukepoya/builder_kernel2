@@ -1,9 +1,0 @@
-#!/bin/bash
-
-START=$(date +"%s")
-
-source Gclang.sh,GPKclang.sh
-
-END=$(date +"%s")
-
-DIFF=$(( END - START ))

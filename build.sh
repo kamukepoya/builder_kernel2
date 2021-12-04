@@ -6,7 +6,9 @@ send_msg "⏳ Start building ${KERNELNAME} | DEVICE: Merlinx / Merlin"
 
 START=$(date +"%s")
 
-source compiler/clang/main
+source compiler/clang/Gclang.sh
+
+source compiler/clang/GPKclang.sh
 
 END=$(date +"%s")
 
