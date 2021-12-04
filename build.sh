@@ -6,12 +6,11 @@ tg_post_msg "⏳ Start building ${KERNELNAME} | DEVICE: Merlinx / Merlin"
 
 START=$(date +"%s")
 
-#com
-com() {
-        - compiler/clang/Gclang.sh \
-        - compiler/clang/GPKclang.sh
+source() {
+        - source compiler/clang/Gclang.sh \
+        - source compiler/clang/GPKclang.sh
 }
-com
+source
 END=$(date +"%s")
 
 DIFF=$(( END - START ))
