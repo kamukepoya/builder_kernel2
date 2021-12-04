@@ -8,10 +8,17 @@
 # TG_TOKEN | Your telegram bot token
 # TG_CHAT_ID | Your telegram private ci chat id
 
-echo "Downloading few Dependecies . . ."
+#clear
+clear() {
+        - rm -rf merlin AnyKernel clang GCC64 GCC32 \
+        - sleep 30s
+}
+
 # Kernel Sources
+KernelSource() {
      git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
      git clone --depth=1 https://github.com/GengKapak/GengKapak-clang -b 12 clang
+}
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
@@ -40,11 +47,6 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-echo "CONFIG_LLVM_POLLY=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_CC_STACKPROTECTOR_STRONG=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_ARM_ARCH_TIMER_VCT_ACCESS=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_KUSER_HELPERS=y" >> arch/arm64/configs/"merlin_defconfig"
 make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
@@ -87,6 +89,8 @@ function zipping() {
     zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
 }
+clear
+KernelSource
 compile
 zipping
 END=$(date +"%s")
