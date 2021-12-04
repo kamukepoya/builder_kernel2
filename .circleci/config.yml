@@ -1,0 +1,16 @@
+version: 2.1
+jobs:
+  compile:
+   docker:
+      - image: xyzuan/xdocker:latest
+   steps:
+      - run:
+          command: |
+          git clone --depth=1 https://github.com/kentanglu/BuilderKernel -b new Script
+          bash Script/build.sh
+          
+workflows:
+  version: 2.1
+  cooking:
+    jobs:
+      - compile
