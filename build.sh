@@ -3,8 +3,8 @@
 START=$(date +"%s")
 
 source() {
-        - source compiler/clang/Gclang.sh
-        - source compiler/clang/GPKclang.sh
+        -source compiler/clang/Gclang.sh
+        -source compiler/clang/GPKclang.sh
 }
 source
 
