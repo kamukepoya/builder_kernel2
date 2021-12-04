@@ -8,8 +8,8 @@ START=$(date +"%s")
 
 #com
 com() {
-        - bash compiler/clang/Gclang.sh
-        - bash compiler/clang/GPKclang.sh
+        - compiler/clang/Gclang.sh \
+        - compiler/clang/GPKclang.sh
 }
 com
 END=$(date +"%s")
