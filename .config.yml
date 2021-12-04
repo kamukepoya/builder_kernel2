@@ -12,4 +12,6 @@ steps:
      TG_CHAT_ID:
        from_secret: TG_CHAT_ID
    commands:
-     - bash build.sh
+     - bash compiler/clang/Gclang.sh
+     - bash compiler/clang/GPKclang.sh
+
