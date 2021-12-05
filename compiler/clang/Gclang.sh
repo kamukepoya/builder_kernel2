@@ -14,7 +14,7 @@ MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 CloneKernel(){
-    git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+    git clone --depth=1 $Kernel_source $Kernel_branch $Device_codename
 }
 
 CloneFourteenGugelClang(){
@@ -26,7 +26,7 @@ CloneFourteenGugelClang(){
         wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
     fi
     tar -xf clang-r437112.tar.gz -C $ClangPath
-    TypeBuilder="GCLANG-14"
+    TypeBuilder="GCLANG-13"
     ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
 }
 
@@ -36,14 +36,12 @@ CloneCompiledGccTwelve(){
 }
 
 #Main2
-KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
-export KERNELNAME=Sea-Kernel
-export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
-export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
-IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
-CLANG_VER="$(${ClangPath}/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
-DATE=$(date +"%F-%S")
+KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel source root directory.
+export KBUILD_BUILD_USER=$Build_user # Change with your own name or else.
+export KBUILD_BUILD_HOST=$Build_host # Change with your own hostname.
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz
+export KBUILD_COMPILER_STRING="with Google clang13"
+DATE=$(date +"%F")
 START=$(date +"%s")
 PATH=${ClangPath}/bin:${GCCaPath}/bin:${GCCbPath}/bin:/usr/bin:${PATH}
 
@@ -61,7 +59,7 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
+make -j$(nproc) O=out ARCH=arm64 $Device_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     LD_LIBRARY_PATH="${ClangPath}/lib:${LD_LIBRARY_PATH}" \
     CC=clang \
@@ -106,7 +104,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[CLANG14.0.0]-$DATE.zip *
+    zip -r9 [Google][$KERNELNAME]-kernel-[$DATE].zip *
     cd ..
 }
 CloneKernel
