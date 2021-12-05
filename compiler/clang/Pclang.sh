@@ -3,26 +3,19 @@
 # Copyright (C) 2021 a xyzprjkt property
 #
 
-# Needed Secret Variable
-# DEVICE_CODENAME | Your device codename
-# TG_TOKEN | Your telegram bot token
-# TG_CHAT_ID | Your telegram private ci chat id
-
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+     git clone --depth=1 $Kernel_source $Kernel_branch $Device_codename
      git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b proton-clang-11 clang
 
 # Main Declaration
-KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
+KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel source root directory.
 CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
-export KERNELNAME=Sea-Kernel
-export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
-export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
-CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
-IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
-DATE=$(date +"%F-%S")
+export KBUILD_BUILD_USER=$Build_user # Change with your own name or else.
+export KBUILD_BUILD_HOST=$Build_host # Change with your own hostname.
+export KBUILD_COMPILER_STRING="With Proton 11"
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz
+DATE=$(date +"%F")
 START=$(date +"%s")
 PATH="${PATH}:$(pwd)/clang/bin"
 
@@ -40,12 +33,12 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-echo "CONFIG_LLVM_POLLY=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_CC_STACKPROTECTOR_STRONG=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_ARM_ARCH_TIMER_VCT_ACCESS=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_KUSER_HELPERS=y" >> arch/arm64/configs/"merlin_defconfig"
-make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
+echo "CONFIG_LLVM_POLLY=y" >> arch/arm64/configs/"$Device_defconfig"
+echo "CONFIG_CC_STACKPROTECTOR_STRONG=y" >> arch/arm64/configs/"$Device_defconfig"
+echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"$Device_defconfig"
+echo "CONFIG_ARM_ARCH_TIMER_VCT_ACCESS=y" >> arch/arm64/configs/"$Device_defconfig"
+echo "CONFIG_KUSER_HELPERS=y" >> arch/arm64/configs/"$Device_defconfig"
+make -j$(nproc) O=out ARCH=arm64 $Device_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
@@ -84,7 +77,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[PROTON11]-$DATE.zip *
+    zip -r9 [Proton][$KERNELNAME]-kernel-[$DATE].zip *
     cd ..
 }
 compile
