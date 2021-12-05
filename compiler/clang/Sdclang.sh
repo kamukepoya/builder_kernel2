@@ -14,7 +14,7 @@ MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 CloneKernel(){
-    git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+    git clone --depth=1 $Kernel_source $Kernel_branch $Device_codename
 }
 
 CloneSDClang(){
@@ -27,14 +27,14 @@ CloneCompiledGccTwelve(){
 }
 
 #Main2
-KERNEL_ROOTDIR=$(pwd)/merlin # IMPORTANT ! Fill with your kernel source root directory.
-export KERNELNAME=Sea-Kernel
-export KBUILD_BUILD_USER=Asyanx # Change with your own name or else.
-export KBUILD_BUILD_HOST=#ZpyLab # Change with your own hostname.
-IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
+KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel source root directory.
+export KERNELNAME=$Kernel_name
+export KBUILD_BUILD_USER=$Build_user # Change with your own name or else.
+export KBUILD_BUILD_HOST=$Build_host # Change with your own hostname.
+IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz
 CLANG_VER="$("$ClangPath"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
-DATE=$(date +"%F-%S")
+DATE=$(date +"%F")
 START=$(date +"%s")
 PATH=${ClangPath}/bin:${GCCaPath}/bin:${GCCbPath}/bin:/usr/bin:${PATH}
 
@@ -52,10 +52,10 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_ARM_ARCH_TIMER_VCT_ACCESS=y" >> arch/arm64/configs/"merlin_defconfig"
-echo "CONFIG_KUSER_HELPERS=y" >> arch/arm64/configs/"merlin_defconfig"
-make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
+echo "CONFIG_COMPAT_VDSO=y" >> arch/arm64/configs/"$Device_defconfig"
+echo "CONFIG_ARM_ARCH_TIMER_VCT_ACCESS=y" >> arch/arm64/configs/"$Device_defconfig"
+echo "CONFIG_KUSER_HELPERS=y" >> arch/arm64/configs/"$Device_defconfig"
+make -j$(nproc) O=out ARCH=arm64 $Device_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     AS=llvm-as \
     LD=ld.lld \
@@ -98,7 +98,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[SDClang]-$DATE.zip *
+    zip -r9 [SDclang][$KERNELNAME]-kernel-[$DATE].zip *
     cd ..
 }
 CloneKernel
