@@ -7,7 +7,7 @@ jobs:
       - run:
           command: |
           git clone --depth=1 https://github.com/kentanglu/BuilderKernel -b new Script
-          bash Script/build.sh
+          bash Script/compiler/Gclang.sh
           
 workflows:
   version: 2.1
