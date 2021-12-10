@@ -22,10 +22,10 @@ CloneFourteenGugelClang(){
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     mkdir $ClangPath
     rm -rf $ClangPath/*
-    if [ ! -e "${MainPath}/clang-r437112.tar.gz" ];then
-        wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
+    if [ ! -e "${MainPath}/clang-r428724.tar.gz" ];then
+        wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0625305092d0cfa7e28b0e1b268aff1d3d751eca/clang-r428724/bin.tar.gz -O "clang-r428724.tar.gz"
     fi
-    tar -xf clang-r437112.tar.gz -C $ClangPath
+    tar -xf clang-r428724.tar.gz -C $ClangPath
     TypeBuilder="GCLANG-13"
     ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
 }
@@ -104,7 +104,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [Google][$KERNELNAME]-kernel-[$DATE].zip *
+    zip -r9 [$KERNELNAME][Google]-$DATE.zip *
     cd ..
 }
 CloneKernel
