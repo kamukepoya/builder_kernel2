@@ -5,7 +5,7 @@
 
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
-     git clone --depth=1 https://github.com/kentanglu/Rocket_Kernel_MT6768 -b eleven merlin
+     git clone --depth=1 $Kernel_source $Kernel_branch $Device_codename
      git clone --depth=1 https://github.com/NusantaraDevs/DragonTC -b daily/10.0 clang
      git clone --depth=1 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu -b 10 gcc
      git clone --depth=1 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi -b 10 gcc32
@@ -13,9 +13,8 @@ echo "Downloading few Dependecies . . ."
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/merlin
 CLANG_ROOTDIR=$(pwd)/clang
-export KERNELNAME=Sea-Kernel
-export KBUILD_BUILD_USER=Asyanx 
-export KBUILD_BUILD_HOST=#ZpyLab
+export KBUILD_BUILD_USER=Itsprof
+export KBUILD_BUILD_HOST=CircleCItod
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz-dtb
@@ -37,8 +36,7 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-echo "CONFIG_LLVM_POLLY=y" >> arch/arm64/configs/"merlin_defconfig"
-make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
+make -j$(nproc) O=out ARCH=arm64 $Device_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=clang \
     AS=llvm-as \
@@ -55,7 +53,7 @@ make -j$(nproc) ARCH=arm64 O=out \
 	finerr
 	exit 1
    fi
-  git clone --depth=1 $ANYKERNEL AnyKernel
+  git clone --depth=1 $Anykernel AnyKernel
 	cp $IMAGE AnyKernel
 }
 
@@ -82,7 +80,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 $KERNELNAME-[DTC10]-$DATE.zip *
+    zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
 }
 compile
