@@ -14,7 +14,7 @@ MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 CloneKernel(){
-    git clone --depth=1 $Kernel_source $Kernel_branch $Device_codename
+    git clone --depth=1 https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/kamukepoya/whatever_kernel -b test-kernel $Device_codename
 }
 
 CloneFourteenGugelClang(){
@@ -22,11 +22,11 @@ CloneFourteenGugelClang(){
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     mkdir $ClangPath
     rm -rf $ClangPath/*
-    if [ ! -e "${MainPath}/clang-r428724.tar.gz" ];then
-        wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0625305092d0cfa7e28b0e1b268aff1d3d751eca/clang-r428724/bin.tar.gz -O "clang-r428724.tar.gz"
+    if [ ! -e "${MainPath}/clang-r437112.tar.gz" ];then
+        wget -q  https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/3a785d33320c48b09f7d6fcf2a37fed702686fdc/clang-r437112.tar.gz -O "clang-r437112.tar.gz"
     fi
-    tar -xf clang-r428724.tar.gz -C $ClangPath
-    TypeBuilder="GCLANG-13"
+    tar -xf clang-r437112.tar.gz -C $ClangPath
+    TypeBuilder="GCLANG-14"
     ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
 }
 
@@ -40,7 +40,9 @@ KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel sourc
 export KBUILD_BUILD_USER=Itsprof # Change with your own name or else.
 export KBUILD_BUILD_HOST=AjureMurah # Change with your own hostname.
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz
-export KBUILD_COMPILER_STRING="with Google clang13"
+DTBO=$(pwd)/merlin/out/arch/arm64/boot/dtbo.img
+DTB=$(pwd)/merlin/out/arch/arm64/boot/dts/mediatek/dtb
+export KBUILD_COMPILER_STRING="with Google clang14"
 DATE=$(date +"%F")
 START=$(date +"%s")
 PATH=${ClangPath}/bin:${GCCaPath}/bin:${GCCbPath}/bin:/usr/bin:${PATH}
@@ -59,7 +61,7 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 $Device_defconfig
+make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     LD_LIBRARY_PATH="${ClangPath}/lib:${LD_LIBRARY_PATH}" \
     CC=clang \
@@ -77,8 +79,12 @@ make -j$(nproc) ARCH=arm64 O=out \
 	finerr
 	exit 1
    fi
-  git clone --depth=1 $ANYKERNEL AnyKernel
+        mv $(pwd)/merlin/out/arch/arm64/boot/dts/mediatek/mt6768.dtb dtb
+        cd -
+  git clone --depth=1 https://github.com/kamukepoya/AnyKernel-nih AnyKernel
 	cp $IMAGE AnyKernel
+        cp $DTBO AnyKernel
+        cp $DTB AnyKernel
 }
 
 # Push kernel to channel
@@ -104,7 +110,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [$KERNELNAME]-$DATE.zip *
+    zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
 }
 CloneKernel
