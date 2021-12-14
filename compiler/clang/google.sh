@@ -37,8 +37,8 @@ CloneCompiledGccTwelve(){
 
 #Main2
 KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel source root directory.
-export KBUILD_BUILD_USER=$Build_user # Change with your own name or else.
-export KBUILD_BUILD_HOST=$Build_host # Change with your own hostname.
+export KBUILD_BUILD_USER=Itsprof # Change with your own name or else.
+export KBUILD_BUILD_HOST=AjureMurah # Change with your own hostname.
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz
 export KBUILD_COMPILER_STRING="with Google clang13"
 DATE=$(date +"%F")
@@ -104,7 +104,7 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [$KERNELNAME][Google]-$DATE.zip *
+    zip -r9 [$KERNELNAME]-$DATE.zip *
     cd ..
 }
 CloneKernel
