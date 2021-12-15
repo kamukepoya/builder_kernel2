@@ -14,7 +14,7 @@ MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 CloneKernel(){
-    git clone --depth=1 https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/kamukepoya/whatever_kernel -b test-kernel $Device_codename
+    git clone --depth=1 $Kernel_source $Kernel_branch $Device_codename
 }
 
 CloneFourteenGugelClang(){
@@ -38,7 +38,7 @@ CloneCompiledGccTwelve(){
 #Main2
 KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel source root directory.
 export KBUILD_BUILD_USER=Itsprof # Change with your own name or else.
-export KBUILD_BUILD_HOST=AjureMurah # Change with your own hostname.
+export KBUILD_BUILD_HOST=SircleCI # Change with your own hostname.
 IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz
 DTBO=$(pwd)/merlin/out/arch/arm64/boot/dtbo.img
 DTB=$(pwd)/merlin/out/arch/arm64/boot/dts/mediatek/dtb
@@ -79,7 +79,7 @@ make -j$(nproc) ARCH=arm64 O=out \
 	finerr
 	exit 1
    fi
-        mv $(pwd)/merlin/out/arch/arm64/boot/dts/mediatek/mt6768.dtb dtb
+        cd $(pwd)/merlin/out/arch/arm64/boot/dts/mediatek && mv mt6768.dtb dtb
         cd -
   git clone --depth=1 https://github.com/kamukepoya/AnyKernel-nih AnyKernel
 	cp $IMAGE AnyKernel
