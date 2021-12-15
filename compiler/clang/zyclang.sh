@@ -57,7 +57,7 @@ make -j$(nproc) ARCH=arm64 O=out \
    fi
         cd $(pwd)/mt6768/out/arch/arm64/boot/dts/mediatek && mv mt6768.dtb dtb
         cd -
-  git clone --depth=1 https://github.com/kamukepoya/AnyKernel-nih AnyKernel
+  git clone --depth=1 $Anykernel AnyKernel
 	cp $IMAGE AnyKernel
         cp $DTB AnyKernel
         cp $DTBO AnyKernel
