@@ -7,7 +7,7 @@ jobs:
       - run:
           command: |
            git clone --depth=1 https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} script
-           bash script/compiler/clang/google.sh
+           bash script/compiler/clang/zyclang.sh
 workflows:
   version: 2.1
   cooking:
