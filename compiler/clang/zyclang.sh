@@ -19,7 +19,7 @@ zycClang() {
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel source root directory.
-CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
+CLANG_ROOTDIR=$(pwd)/zyclang # IMPORTANT! Put your clang directory here.
 export KBUILD_BUILD_USER=Itsprof # Change with your own name or else.
 export KBUILD_BUILD_HOST=SirkleCI@server # Change with your own hostname.
 export KBUILD_COMPILER_STRING="With ZyC clang"
