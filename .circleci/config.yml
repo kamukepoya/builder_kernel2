@@ -6,9 +6,8 @@ jobs:
    steps:
       - run:
           command: |
-          git clone --depth=1 https://github.com/kentanglu/BuilderKernel -b new Script
-          bash Script/compiler/clang/google.sh
-          
+           git clone --depth=1 https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} script
+           bash script/compiler/clang/google.sh
 workflows:
   version: 2.1
   cooking:
