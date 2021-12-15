@@ -3,28 +3,32 @@
 # Copyright (C) 2021 a xyzprjkt property
 #
 
-#clear
-clear() {
-        - rm -rf merlin AnyKernel clang GCC64 GCC32 \
-        - sleep 30s
-}
-
 # Kernel Sources
 KernelSource() {
      git clone --depth=1 $Kernel_source $Kernel_branch $Device_codename
-     git clone --depth=1 https://github.com/GengKapak/GengKapak-clang -b 12 clang
+}
+
+# Clang
+zycClang() {
+     rm -rf zyclang
+     rm -rf ZyC-Clang-14.tar.gz
+     mkdir zyclang
+     wget -q  $(curl https://raw.githubusercontent.com/ZyCromerZ/Clang/main/Clang-14-link.txt 2>/dev/null) -O "ZyC-Clang-14.tar.gz"
+     tar -xvf ZyC-Clang-14.tar.gz -C zyclang
 }
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$Device_codename # IMPORTANT ! Fill with your kernel source root directory.
 CLANG_ROOTDIR=$(pwd)/clang # IMPORTANT! Put your clang directory here.
-export KBUILD_BUILD_USER=$Build_user # Change with your own name or else.
-export KBUILD_BUILD_HOST=$Build_host # Change with your own hostname.
-export KBUILD_COMPILER_STRING="With GengKapak clang"
-IMAGE=$(pwd)/merlin/out/arch/arm64/boot/Image.gz
-DATE=$(date +"%F")
+export KBUILD_BUILD_USER=Itsprof # Change with your own name or else.
+export KBUILD_BUILD_HOST=SirkleCI@server # Change with your own hostname.
+export KBUILD_COMPILER_STRING="With ZyC clang"
+IMAGE=$(pwd)/mt6768/out/arch/arm64/boot/Image.gz
+DTBO=$(pwd)/mt6768/out/arch/arm64/boot/dtbo.img
+DTB=$(pwd)/mt6768/out/arch/arm64/boot/dts/mediatek/dtb
+DATE=$(date +"%F"-"%S")
 START=$(date +"%s")
-PATH="${PATH}:$(pwd)/clang/bin"
+PATH="${PATH}:$(pwd)/zyclang/bin"
 
 # Telegram
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
@@ -40,7 +44,7 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 $Device_defconfig
+make -j$(nproc) O=out ARCH=arm64 merlin_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
@@ -52,8 +56,12 @@ make -j$(nproc) ARCH=arm64 O=out \
 	finerr
 	exit 1
    fi
-  git clone --depth=1 $ANYKERNEL AnyKernel
+        cd $(pwd)/mt6768/out/arch/arm64/boot/dts/mediatek && mv mt6768.dtb dtb
+        cd -
+  git clone --depth=1 https://github.com/kamukepoya/AnyKernel-nih AnyKernel
 	cp $IMAGE AnyKernel
+        cp $DTB AnyKernel
+        cp $DTBO AnyKernel
 }
 
 # Push kernel to channel
@@ -79,11 +87,11 @@ function finerr() {
 # Zipping
 function zipping() {
     cd AnyKernel || exit 1
-    zip -r9 [GengKapak][$KERNELNAME]-kernel-[$DATE].zip *
+    zip -r9 $KERNELNAME-$DATE.zip *
     cd ..
 }
-clear
 KernelSource
+zycClang
 compile
 zipping
 END=$(date +"%s")
